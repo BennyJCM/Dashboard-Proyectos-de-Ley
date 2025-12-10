@@ -53,7 +53,17 @@ def load_model_from_bytes(file_bytes: bytes):
 
 @CACHE_RESOURCE
 def load_model_from_path(path: str):
-    return joblib.load(path)
+    if path.startswith("http"):
+        # Descargar el archivo desde la URL
+        response = requests.get(path)
+        if response.status_code != 200:
+            raise FileNotFoundError(f"No se pudo descargar el archivo desde: {path}")
+        # Cargar el modelo desde memoria
+        return joblib.load(io.BytesIO(response.content))
+    else:
+        # Ruta local
+        return joblib.load(path)
+
 
 # --------------------------
 # Limpieza (similar a tu entrenamiento)
@@ -141,15 +151,16 @@ def predecir_lote_con_embeddings(clf_model, textos, tokenizer, bert_model):
 
 # Cachear la carga de datos
 @st.cache_data(show_spinner=True)
-def load_data_final(path: str):
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"No se encuentra el archivo: {path}")
-    try:
-        df = pd.read_csv(path)
-    except Exception:
-        # Intento alternativo por si el archivo realmente es Excel renombrado
-        df = pd.read_excel(path, engine="openpyxl")
-    return df
+def load_data_final(path):
+    # Si la ruta comienza con http, leer desde URL
+    if path.startswith("http"):
+        response = requests.get(path)
+        if response.status_code != 200:
+            raise FileNotFoundError(f"No se pudo descargar el archivo desde: {path}")
+        return pd.read_csv(io.StringIO(response.text))
+    else:
+        return pd.read_csv(path)
+
 
 # Cachear el cálculo de embeddings para todo el dataset
 @st.cache_data(show_spinner=True)
@@ -308,3 +319,4 @@ if st.button("Predecir y mostrar más similares", key="topn_btn"):
 
     st.markdown("### 🏆 Proyectos de Leyes más similares")
     st.dataframe(top_df, use_container_width=True)
+
