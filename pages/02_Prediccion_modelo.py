@@ -214,10 +214,10 @@ def compute_dataset_embeddings(df: pd.DataFrame,
     return df_valid, E, texto_col
 
 tokenizer, bert_model = load_bert()   # BETO (Spanish BERT)
-RUTA_PKL_FIJA = "https://raw.githubusercontent.com/BennyJCM/Dashboard-Proyectos-de-Ley/main/dashboard/modelo_bert_randomforest_optimo.pkl"
+RUTA_PKL_FIJA = "https://raw.githubusercontent.com/BennyJCM/Dashboard-Proyectos-de-Ley/blob/main/dashboard/pages/modelo_bert_randomforest_optimo.pkl"
 
 # Sustituye el text_input por ruta fija (raw string para Windows)
-CSV_PATH = "https://raw.githubusercontent.com/BennyJCM/Dashboard-Proyectos-de-Ley/main/dashboard/pages/data_final.csv"
+CSV_PATH = "https://raw.githubusercontent.com/BennyJCM/Dashboard-Proyectos-de-Ley/blob/main/pages/data_final.csv"
 
 # Carga cacheada del CSV (se hace al entrar a la página)
 df_final = load_data_final(CSV_PATH)
@@ -320,5 +320,6 @@ if st.button("Predecir y mostrar más similares", key="topn_btn"):
 
     st.markdown("### 🏆 Proyectos de Leyes más similares")
     st.dataframe(top_df, use_container_width=True)
+
 
 
