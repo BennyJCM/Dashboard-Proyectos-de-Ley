@@ -6,6 +6,7 @@ import requests
 import numpy as np
 import joblib
 import re
+import io
 from io import BytesIO
 import os
 from sklearn.metrics.pairwise import cosine_similarity
@@ -320,6 +321,7 @@ if st.button("Predecir y mostrar más similares", key="topn_btn"):
 
     st.markdown("### 🏆 Proyectos de Leyes más similares")
     st.dataframe(top_df, use_container_width=True)
+
 
 
 
