@@ -152,7 +152,7 @@ def predecir_lote_con_embeddings(clf_model, textos, tokenizer, bert_model):
 
 # Cachear la carga de datos
 @st.cache_data(show_spinner=True)
-def load_data_final(path):
+def load_data_final(path: str):
     # Si la ruta comienza con http, leer desde URL
     if path.startswith("http"):
         response = requests.get(path)
@@ -320,6 +320,7 @@ if st.button("Predecir y mostrar más similares", key="topn_btn"):
 
     st.markdown("### 🏆 Proyectos de Leyes más similares")
     st.dataframe(top_df, use_container_width=True)
+
 
 
 
