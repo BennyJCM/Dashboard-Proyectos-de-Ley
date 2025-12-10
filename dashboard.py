@@ -2,70 +2,21 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import streamlit as st
-# import joblib
 import re
-# from unidecode import unidecode
-# from nltk.corpus import stopwords  
-# import torch
-# from transformers import BertTokenizer, BertModel
-
 # ---------- Config ----------
 st.set_page_config(
     page_title="Dashboard Proyectos de Ley",
     layout="wide"
 )
 
-# model_name = 'dccuchile/bert-base-spanish-wwm-uncased'
-# tokenizer = BertTokenizer.from_pretrained(model_name)
-# model = BertModel.from_pretrained(model_name)
-
-# def limpiar_texto(texto):
-#     # Primera etapa: limpieza básica
-#     texto = texto.lower()                             # a minúsculas
-#     texto = unidecode(texto)                          # quitar tildes y normalizar
-#     texto = re.sub(r'n°|ndeg', '', texto)             # eliminar "N°" o "ndeg"
-#     texto = re.sub(r'\s+', ' ', texto)                # espacios duplicados → uno solo
-#     texto = texto.strip()                             # eliminar espacios iniciales/finales
-
-#     # Segunda etapa: eliminación de elementos no informativos
-#     texto = re.sub(r'\d+', '', texto)                 # Eliminar números
-#     texto = re.sub(r'[^\w\s]', '', texto)             # Eliminar puntuación
-#     texto = re.sub(r'\s+', ' ', texto).strip()        # Espacios múltiples
-
-#     # Tokenizar y filtrar palabras
-#     palabras = texto.split()
-#     palabras_filtradas = [
-#         p for p in palabras
-#         if p not in stopwords_es                      # stopwords estándar
-#         and p not in stopwords_custom                 # stopwords personalizadas
-#         and len(p) > 2                                # eliminar palabras muy cortas (<=2)
-#     ]
-#     return " ".join(palabras_filtradas)
-
-# def extract_features(text):
-#     # Tokenizar el texto (convertir el texto en tokens)
-#     inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True, max_length=512)
-
-#     # Desactivar el cálculo de gradientes ya que solo estamos haciendo inferencia
-#     with torch.no_grad():
-#         outputs = model(**inputs)
-
-#     # Extraer la última capa oculta de BERT (esto es lo que usaremos como características)
-#     last_hidden_states = outputs.last_hidden_state
-
-#     # Obtener el embedding del primer token [CLS] que representa todo el texto
-#     cls_embedding = last_hidden_states[0][0].numpy()
-
-#     return cls_embedding
-
-# stopwords_es = set(stopwords.words('spanish'))
-# stopwords_custom = set(['rt', '-', '...', '“', '”', '¿', '¡','N°'])
-# tokenizer = BertTokenizer.from_pretrained(model_name)
 
 @st.cache_data
 def load_data():
     df_cnt = pd.read_excel("df_proyectosLey_cantComentariosPosNeg.xlsx", engine="openpyxl")
-    df_cmt = pd.read_excel("comentarios_unido.xlsx", engine="openpyxl")
+    df_cmt1 = pd.read_excel("comentarios_unido1.xlsx", engine="openpyxl")
+    df_cmt2 = pd.read_excel("comentarios_unido2.xlsx", engine="openpyxl")
+    df_cmt3 = pd.read_excel("comentarios_unido3.xlsx", engine="openpyxl")
+    df_cmt = pd.concat([df_cmt1,df_cmt2,df_cmt3], ignore_index=True)
     df_cat = pd.read_excel("proyectosLeyes_unido.xlsx", engine="openpyxl")
 
     # Limpieza
