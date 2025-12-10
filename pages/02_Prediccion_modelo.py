@@ -2,6 +2,7 @@
 # pages/02_Prediccion_modelo.py
 import streamlit as st
 import pandas as pd
+import requests
 import numpy as np
 import joblib
 import re
@@ -319,4 +320,5 @@ if st.button("Predecir y mostrar más similares", key="topn_btn"):
 
     st.markdown("### 🏆 Proyectos de Leyes más similares")
     st.dataframe(top_df, use_container_width=True)
+
 
